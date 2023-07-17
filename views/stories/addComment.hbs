@@ -1,0 +1,16 @@
+<h3>Add a Comment on {{story.user.firstName}}'s Story</h3>
+<div class="row">
+    <form action="/stories/comments/{{story._id}}" method="POST" class="col s12">
+        <div class="row">
+            <div class="input-field">
+                <h5>Your Comment:</h5>
+                <textarea name="body" id="body"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <button class="btn green darken-2">Post Comment</button>
+            <a href="/stories/{{story._id}}" class="btn blue">Cancel</a>
+        </div>
+    </form>
+</div>

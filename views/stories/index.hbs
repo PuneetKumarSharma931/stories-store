@@ -1,0 +1,91 @@
+<h3>Public Stories</h3>
+<a class='dropdown-trigger btn' style="margin-bottom: 20px; margin-top: 10px;" href='#' data-target='dropdown1'>Filter By</a>
+
+<ul id='dropdown1' class='dropdown-content'>
+    <li onclick="filterByLikes()"><a href="#!">Likes</a></li>
+    <li onclick="filterByDislikes()"><a href="#!">Dislikes</a></li>
+    <li onclick="filterByLikesToDislikes()"><a href="#!">Likes to Dislikes</a></li>
+</ul>
+
+<div class="row">
+    {{#each stories}}
+        <div class="col s12 m4 story">
+            <div class="card">
+                <div class="card-image">
+                    {{{ editIcon user ../user _id}}}
+                </div>
+                <div class="card-content center-align">
+                    <h5>{{title}}</h5>
+                    <p>{{stripTags (truncate body 150)}}</p>
+                    <br/>
+                    <div class="chip">
+                        <img src="{{user.image}}" alt="user Image">
+                        <a href="/stories/user/{{user._id}}">{{user.displayName}}</a>
+                    </div>
+                </div>
+                <div class="card-action center-align align-icons">
+                    <p><i class="fa-solid fa-thumbs-up"></i><span> {{likesCount}}</span></p>
+                    <a href="/stories/{{_id}}" class="btn grey darken-3">Read more</a>
+                    <p><i class="fa-solid fa-thumbs-down"></i><span> {{dislikesCount}}</span></p>
+                </div>
+            </div>
+        </div>
+    {{else}}
+    <p>No Public Stories to display!</p>
+    {{/each}}
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        var instances = M.Dropdown.init(elems, {
+            alignment: 'left',
+            closeOnClick: true
+        });
+  });
+
+  const stories = document.getElementsByClassName('story');
+  const storiesArray = Array.from(stories);
+  const storyContainer = document.getElementsByClassName('row')[0];
+
+  function filterByLikes() {
+
+    storiesArray.sort((a, b) => {
+
+            return Number(b.children[0].children[2].children[0].children[1].innerText) - Number(a.children[0].children[2].children[0].children[1].innerText);
+        });
+
+        storiesArray.forEach((story) => {
+
+            storyContainer.appendChild(story);
+        });
+   }
+
+   function filterByDislikes() {
+
+        storiesArray.sort((a, b) => {
+
+            return Number(b.children[0].children[2].children[2].children[1].innerText) - Number(a.children[0].children[2].children[2].children[1].innerText);
+        });
+
+        storiesArray.forEach((story) => {
+
+            storyContainer.appendChild(story);
+        });
+   }
+
+   function filterByLikesToDislikes() {
+
+        storiesArray.sort((a, b) => {
+
+            return (Number(b.children[0].children[2].children[0].children[1].innerText)/Number(b.children[0].children[2].children[2].children[1].innerText)) - (Number(a.children[0].children[2].children[0].children[1].innerText)/Number(a.children[0].children[2].children[2].children[1].innerText));
+        });
+
+        storiesArray.forEach((story) => {
+
+            storyContainer.appendChild(story);
+        });
+   }
+    
+</script>

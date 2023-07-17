@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col s12 m8">
+        <h3>{{story.title}}
+            <small>{{{editIcon story.user user story._id false}}}</small>
+        </h3>
+
+        <div class="card story">
+            <div class="card-content">
+                <span class="card-title">{{formatDate story.createdAt 'MMMM Do YYYY, h:mm:ss a'}}</span>
+                {{{story.body}}}
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m4">
+        <div class="card center-align">
+            <div class="card-content">
+                <span class="card-title">{{story.user.displayName}}</span>
+                <img src="{{story.user.image}}" alt="user Image" class="circle responsive-img img-small">
+            </div>
+            <div class="card-action">
+                <a href="/stories/user/{{story.user._id}}" class="btn grey-darken-3">More From {{story.user.firstName}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="row">
+
+    <form class="mt col" action="/stories/likes/{{story._id}}" method="POST">
+        {{{likeIcon story.likesCount story.likedUsers user}}}
+    </form>
+
+    <form class="mt col" action="/stories/dislikes/{{story._id}}" method="POST">
+        {{{dislikeIcon story.dislikesCount story.dislikedUsers user}}}
+    </form>      
+
+</div>
+
+<h5 style="margin-top: 45px;">Comments</h5>
+
+<div class="divider"></div>
+
+{{{showCommentButton story.comments user story._id}}}
+
+<div style="margin-left: -10px; margin-top: 20px;" class="row">
+    <div class="col s8">
+        {{#each story.comments}}
+            <div class="card">
+                <div class="card-content commentCard">
+                    <div class="comment">
+                        <div class="commentHeader">
+                            <img src={{userImage}} alt="user Image" class="circle responsive-img img-comment">
+                            <span><strong>{{userName}}</strong> {{formatDate commentedAt 'MMMM Do YYYY, h:mm:ss a'}}</span>
+                        </div>
+                        <div style="padding-left: 74px; margin-top: -13px;">{{{comment}}}</div>
+                    </div>
+                    {{{showCommentMoreVert ../story userId ../user}}}
+                </div>
+            </div>
+        {{else}}
+        <p>No Comments on this Story yet!!</p>
+        {{/each}}
+    </div>
+</div>
+
+<script defer>
+    document.addEventListener('click', (e) => {
+
+        const isDropdownButton = e.target.matches('[data-dropdown-button]');
+
+        if(!isDropdownButton && e.target.closest('[data-dropdown]') != null) return;
+
+        let currentDropdown;
+
+        if( isDropdownButton ) {
+
+            currentDropdown = e.target.closest('[data-dropdown]');
+            currentDropdown.classList.toggle('active');
+        }
+
+        document.querySelectorAll("[data-dropdown].active", (dropdown) => {
+
+            if(dropdown !== currentDropdown) {
+
+                dropdown.classList.remove('active');
+            }
+        });
+    });
+
+</script>
